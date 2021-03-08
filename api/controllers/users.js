@@ -13,7 +13,7 @@ const userController = {
   getUser(req, res) {
     User.findOne({
       where: {
-      name: req.params.name,
+      name: req.params.id,
       },
     })
       .then((user) => {
@@ -39,6 +39,11 @@ const userController = {
       })
       .catch((err) => res.send(err));
   },
+  loginUser(req,res){
+    User.findOne({where: {email : req.body.email, password: req.body.password}})
+    .then(user => res.send(user))
+    .catch(e => console.log(e))
+  }
 };
 
 module.exports = userController;
