@@ -37,12 +37,12 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn({history}) {
   const classes = useStyles();
   const dispatch = useDispatch();
-
-    const [loginInput, setLoginInput] = useState({
+  const [loginInput, setLoginInput] = useState({
     email: "",
     password: "",
   })
-  
+
+
   const handleChange = (e) => {
       e.preventDefault()
       setLoginInput({ ...loginInput, [e.target.name]: e.target.value });
@@ -58,6 +58,7 @@ export default function SignIn({history}) {
         },1000)
       })
   }
+ 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -72,7 +73,6 @@ export default function SignIn({history}) {
           <TextField
             variant="outlined"
             margin="normal"
-            required
             fullWidth
             label="Email"
             name="email"
@@ -82,7 +82,6 @@ export default function SignIn({history}) {
           <TextField
             variant="outlined"
             margin="normal"
-            required
             fullWidth
             name="password"
             label="Password"

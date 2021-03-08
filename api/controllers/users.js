@@ -42,7 +42,7 @@ const userController = {
   loginUser(req,res){
     User.findOne({where: {email : req.body.email, password: req.body.password}})
     .then(user => res.send(user))
-    .catch(e => console.log(e))
+    .catch(()=>res.sendStatus(401))
   }
 };
 

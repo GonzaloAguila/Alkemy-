@@ -1,23 +1,23 @@
 import {
     CREATE_USER,
     FETCH_USER,
-    LOGGED_USER
+    FETCH_USER_ERROR
     } from "../constants";
     
     const initialState = {
       user: {},
       lastUser: {},
-      loggedUser: {}
+      error: ""
     };
     
     export default (state = initialState, action) => {
       switch (action.type) {
         case FETCH_USER:
-          return { ...state, user: action.data };   
+          return { ...state, user: action.data };
+        case FETCH_USER_ERROR:
+            return { ...state, error: action.data };     
         case CREATE_USER:
-            return { ...state, lastUser: action.data };
-        case LOGGED_USER:
-            return { ...state, loggedUser: action.data };        
+            return { ...state, lastUser: action.data };       
         default:
           return state;
       }

@@ -82,7 +82,6 @@ export default function SignUp({history}) {
                 autoComplete="fname"
                 name="name"
                 variant="outlined"
-                required
                 fullWidth
                 label="Name"
                 autoFocus
@@ -94,7 +93,6 @@ export default function SignUp({history}) {
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
-                required
                 fullWidth
                 label="Email"
                 name="email"
@@ -107,7 +105,6 @@ export default function SignUp({history}) {
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
-                required
                 fullWidth
                 name="password"
                 label="Password"
@@ -129,6 +126,9 @@ export default function SignUp({history}) {
             variant="contained"
             color="primary"
             className={classes.submit}
+            disabled={registerInput.email 
+              && registerInput.password 
+              && registerInput.name ? false : true}
           >
             Registrarme
           </Button>

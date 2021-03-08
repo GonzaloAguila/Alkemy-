@@ -21399,7 +21399,6 @@ function SignIn(_ref) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_9__.default, {
     variant: "outlined",
     margin: "normal",
-    required: true,
     fullWidth: true,
     label: "Email",
     name: "email",
@@ -21408,7 +21407,6 @@ function SignIn(_ref) {
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_9__.default, {
     variant: "outlined",
     margin: "normal",
-    required: true,
     fullWidth: true,
     name: "password",
     label: "Password",
@@ -21575,7 +21573,6 @@ function SignUp(_ref) {
     autoComplete: "fname",
     name: "name",
     variant: "outlined",
-    required: true,
     fullWidth: true,
     label: "Name",
     autoFocus: true,
@@ -21587,7 +21584,6 @@ function SignUp(_ref) {
     xs: 12
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_10__.default, {
     variant: "outlined",
-    required: true,
     fullWidth: true,
     label: "Email",
     name: "email",
@@ -21600,7 +21596,6 @@ function SignUp(_ref) {
     xs: 12
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_10__.default, {
     variant: "outlined",
-    required: true,
     fullWidth: true,
     name: "password",
     label: "Password",
@@ -21617,7 +21612,8 @@ function SignUp(_ref) {
     fullWidth: true,
     variant: "contained",
     color: "primary",
-    className: classes.submit
+    className: classes.submit,
+    disabled: registerInput.email && registerInput.password && registerInput.name ? false : true
   }, "Registrarme"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_9__.default, {
     container: true,
     justify: "flex-end"
@@ -21812,8 +21808,7 @@ function newOperation(_ref) {
     margin: "normal",
     onChange: handleInput,
     value: formInput.concept,
-    name: "concept",
-    required: true
+    name: "concept"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_6__.default, {
     label: "Amount",
     placeholder: "$",
@@ -21821,8 +21816,7 @@ function newOperation(_ref) {
     margin: "normal",
     onChange: handleInput,
     value: formInput.amount,
-    name: "amount",
-    required: true
+    name: "amount"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_core_FormLabel__WEBPACK_IMPORTED_MODULE_7__.default, {
     component: "legend"
   }, "Type"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_material_ui_core_RadioGroup__WEBPACK_IMPORTED_MODULE_8__.default, {
@@ -21963,9 +21957,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "fetchUser": () => (/* binding */ fetchUser),
 /* harmony export */   "createUser": () => (/* binding */ createUser),
-/* harmony export */   "checkUserStatus": () => (/* binding */ checkUserStatus),
-/* harmony export */   "logoutUser": () => (/* binding */ logoutUser),
-/* harmony export */   "updateUserWallet": () => (/* binding */ updateUserWallet)
+/* harmony export */   "logoutUser": () => (/* binding */ logoutUser)
 /* harmony export */ });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
@@ -21976,6 +21968,13 @@ __webpack_require__.r(__webpack_exports__);
 var fetchUserCreator = function fetchUserCreator(data) {
   return {
     type: _constants__WEBPACK_IMPORTED_MODULE_1__.FETCH_USER,
+    data: data
+  };
+};
+
+var fetchUserErrorCreator = function fetchUserErrorCreator(data) {
+  return {
+    type: _constants__WEBPACK_IMPORTED_MODULE_1__.FETCH_USER_ERROR,
     data: data
   };
 };
@@ -21998,25 +21997,21 @@ var fetchUser = function fetchUser(userdata) {
   return function (dispatch) {
     return axios__WEBPACK_IMPORTED_MODULE_0___default().post("/api/users/login", userdata).then(function (_ref) {
       var data = _ref.data;
-      localStorage.setItem("loggedUser", JSON.stringify(data));
-      return dispatch(fetchUserCreator(data));
+
+      if (data.id) {
+        localStorage.setItem("loggedUser", JSON.stringify(data));
+        return dispatch(fetchUserCreator(data));
+      } else {
+        return dispatch(fetchUserErrorCreator("Credenciales incorrectas"));
+      }
     });
   };
 };
 var createUser = function createUser(newuser) {
   return function (dispatch) {
-    console.log(newuser);
     return axios__WEBPACK_IMPORTED_MODULE_0___default().post("/api/users/newUser", newuser).then(function (_ref2) {
       var data = _ref2.data;
       return dispatch(createUserCreator(data));
-    });
-  };
-};
-var checkUserStatus = function checkUserStatus() {
-  return function (dispatch) {
-    return axios__WEBPACK_IMPORTED_MODULE_0___default().get("/api/users/auth/me").then(function (_ref3) {
-      var data = _ref3.data;
-      return dispatch(checkUserStatusCreator(data));
     });
   };
 };
@@ -22024,18 +22019,6 @@ var logoutUser = function logoutUser() {
   return function (dispatch) {
     return axios__WEBPACK_IMPORTED_MODULE_0___default().post("/api/users/auth/logout").then(function () {
       return dispatch(checkUserStatusCreator({}));
-    });
-  };
-};
-var updateUserWallet = function updateUserWallet(user, tier) {
-  return function (dispatch) {
-    return axios__WEBPACK_IMPORTED_MODULE_0___default().put("/api/users/updatewallet", {
-      name: user,
-      wallet: tier
-    }).then(function (_ref4) {
-      var data = _ref4.data;
-      console.log(data, 'la data que me envia el server');
-      dispatch(checkUserStatusCreator(data));
     });
   };
 };
@@ -22053,7 +22036,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "FETCH_USER": () => (/* binding */ FETCH_USER),
 /* harmony export */   "CREATE_USER": () => (/* binding */ CREATE_USER),
-/* harmony export */   "LOGGED_USER": () => (/* binding */ LOGGED_USER),
+/* harmony export */   "FETCH_USER_ERROR": () => (/* binding */ FETCH_USER_ERROR),
 /* harmony export */   "FETCH_OPERATIONS": () => (/* binding */ FETCH_OPERATIONS),
 /* harmony export */   "FETCH_IN_OPERATIONS": () => (/* binding */ FETCH_IN_OPERATIONS),
 /* harmony export */   "FETCH_OUT_OPERATIONS": () => (/* binding */ FETCH_OUT_OPERATIONS),
@@ -22063,7 +22046,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 var FETCH_USER = "FETCH_USER";
 var CREATE_USER = "CREATE_USER";
-var LOGGED_USER = "LOGGED_USER";
+var FETCH_USER_ERROR = "FETCH_USER_ERROR";
 var FETCH_OPERATIONS = "FETCH_OPERATIONS";
 var FETCH_IN_OPERATIONS = "FETCH_IN_OPERATIONS";
 var FETCH_OUT_OPERATIONS = "FETCH_OUT_OPERATIONS";
@@ -22210,7 +22193,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 var initialState = {
   user: {},
   lastUser: {},
-  loggedUser: {}
+  error: ""
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (function () {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
@@ -22222,14 +22205,14 @@ var initialState = {
         user: action.data
       });
 
+    case _constants__WEBPACK_IMPORTED_MODULE_0__.FETCH_USER_ERROR:
+      return _objectSpread(_objectSpread({}, state), {}, {
+        error: action.data
+      });
+
     case _constants__WEBPACK_IMPORTED_MODULE_0__.CREATE_USER:
       return _objectSpread(_objectSpread({}, state), {}, {
         lastUser: action.data
-      });
-
-    case _constants__WEBPACK_IMPORTED_MODULE_0__.LOGGED_USER:
-      return _objectSpread(_objectSpread({}, state), {}, {
-        loggedUser: action.data
       });
 
     default:

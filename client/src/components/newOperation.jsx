@@ -68,7 +68,6 @@ export default function newOperation({history}) {
           onChange={handleInput}
           value={formInput.concept}
           name="concept"
-          required
         />
         <TextField
           label={"Amount"}
@@ -78,7 +77,6 @@ export default function newOperation({history}) {
           onChange={handleInput}
           value={formInput.amount}
           name="amount"
-          required
         />
         <br/>
          <FormLabel component="legend">Type</FormLabel>
