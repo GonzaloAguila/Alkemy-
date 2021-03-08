@@ -36,8 +36,10 @@ const operationController = {
   },
   //Controller to update operations.
   updateOperation(req, res) {
-    Operation.update(req.body,{
-        where: { id: req.params.id },
+    const {concept, amount, id} = req.body
+    console.log(req.body)
+    Operation.update({concept, amount},{
+        where: {id},
         returning: true, //we need to return the updated opertaion so we can send it to the client side.
         plain: true,
       }

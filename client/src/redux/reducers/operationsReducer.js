@@ -10,6 +10,11 @@ import {
     const initialState = {
       operations: [],
     };
+
+    const updateOperation = (newoperation) => {
+        const oldOpIndex = initialState.operations.findIndex((op) => op.id = newoperation.id)
+        return initialState.operations[oldOpIndex] = newoperation
+    }
     
     export default (state = initialState, action) => {
       switch (action.type) {
@@ -22,7 +27,9 @@ import {
         case CREATE_OPERATION:
           return { ...state, operations:[...state.operations, action.data] };  
         case DELETE_OPERATION:
-          return { ...state, operations: state.operations.filter((op) => op.id !== action.data)};          
+          return { ...state, operations: state.operations.filter((op) => op.id !== action.data)}
+        case UPDATE_OPERATION:
+          return { ...state, operations: updateOperation(action.data)}; ;          
         default:
           return state;
       }

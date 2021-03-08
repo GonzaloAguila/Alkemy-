@@ -11,11 +11,9 @@ import Table from "./Table";
 import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
 import Button from "@material-ui/core/Button";
-import Update from "@material-ui/icons/Update";
-import Confirm from "@material-ui/icons/Check";
+
 
 import { fetchOperations } from "../redux/actions-creators/operationsActions";
-import { deleteOperation } from "../redux/actions-creators/operationsActions";
 
 export default function Home() {
   const useStyles = makeStyles((theme) => ({
@@ -54,10 +52,7 @@ export default function Home() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const {operations}  = useSelector((state) => state.operationsReducer)
-  const [localOperations, setLocalOperations] = useState(operations)
   const [localUser, setLocalUser] = useState({});
-  const [isEditing, setisEditing] = useState(false);
-  const [updateIcon, setUpdateIcon] = useState(<Update/>)
 
   useEffect(() => {
     const data = localStorage.getItem("loggedUser");
@@ -68,12 +63,8 @@ export default function Home() {
     }
   }, []);
 
-  useEffect(() => {
-    setLocalOperations(operations)
-  }, [operations]);
-
   const getBalance = (operations) => {
-    if (operations) {
+    if (operations.length > 0) {
       return operations.reduce((acc, el) => {
         if (el.type == "in") {
           return acc + el.amount;
@@ -91,21 +82,6 @@ export default function Home() {
       ? dispatch(fetchOperations(localUser.id, type))
       : dispatch(fetchOperations(localUser.id, null));
   };
-
-  const handleDelete = (e, operationId) => {
-    e.preventDefault();
-    dispatch(deleteOperation(operationId))
-    .then(() => window.location.reload());
-  };
-
-  const handleUpdate = (e, id) => {
-    e.preventDefault();
-    setisEditing(!isEditing);
-    const itemToUpdate = operations.find((op) => op.id === id)
-    isEditing ? setUpdateIcon(<Confirm />)
-              : setUpdateIcon(<Update/>)
-  };
-  
 
 
   return (
@@ -163,10 +139,7 @@ export default function Home() {
         </Container>
         <br></br>
         <Table 
-        operations={localOperations} 
-        handleDelete={handleDelete}
-        handleUpdate={handleUpdate}
-        updateIcon={updateIcon}
+        operations={operations} 
         />
         <br></br>
       </Container>

@@ -59,8 +59,14 @@ export const createOperation = (operationData) => (dispatch) => {
 };
 
 export const deleteOperation = (operationId) => (dispatch) => {
-  console.log(operationId);
   return axios
     .delete(`/api/operations/deleteOperation/${operationId}`)
     .then(() => dispatch(deleteOperationCreator(operationId)));
 };
+
+export const updateOperation = (newData) => (dispatch) => {
+  return axios
+    .put(`/api/operations/updateOperation`, newData)
+    .then((updatedOperation) => dispatch(updateOperationCreator(updatedOperation)));
+};
+

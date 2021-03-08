@@ -1,5 +1,5 @@
-import React, { Fragment, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch} from "react-redux";
 import {Link} from 'react-router-dom';
 import {fetchUser} from "../redux/actions-creators/usersActions"
 
