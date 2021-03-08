@@ -47,9 +47,9 @@ const operationController = {
   },
  //Controller to delete operations.
   deleteOperation(req, res) {
-    Operation.destroy({ where: { id: req.params.id } })
+    Operation.destroy({ where: { id: Number(req.params.id) } })
       .then(() => res.sendStatus(204))
-      .catch((e) => next(e));
+      .catch((e) => console.log(e));
   },
 };
 

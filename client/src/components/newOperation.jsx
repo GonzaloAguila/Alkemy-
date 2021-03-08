@@ -14,7 +14,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Typography from "@material-ui/core/Typography";
 
 
-export default function newOperation() {
+export default function newOperation({history}) {
   const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
@@ -39,6 +39,7 @@ export default function newOperation() {
   const handleSubmit = (evt) => {
     evt.preventDefault();
     dispatch(createOperation(formInput))
+    .then(() => history.push("/"))
   };
 
   const handleInput = (evt) => {
@@ -54,9 +55,8 @@ export default function newOperation() {
       setFormInput({...formInput, userId: parsedData.id})
     }
    },[])
-   
-   console.log(formInput)
-  return (
+  
+   return (
     <Container>
       <form action="" className={classes.container} onSubmit={(e) => handleSubmit(e,formInput)}>
       <Typography variant="h5">
@@ -90,7 +90,9 @@ export default function newOperation() {
            <br/>
         <Button disabled={formInput.concept && formInput.type && formInput.amount ? false : true}
          variant="outlined" 
-         className={classes.buttonColor}>
+         className={classes.buttonColor}
+         type="submit"
+         >
           Agregar
         </Button>
       </form>
